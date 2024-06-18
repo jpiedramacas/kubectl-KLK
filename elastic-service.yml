@@ -9,7 +9,7 @@ spec:
   ports:
   - port: 9200
     protocol: TCP
-    targetPort: 9200  # Ajustado a 9200 para coincidir con el contenedor
+    targetPort: 9200
   selector:
     k8s-app: elasticsearch-logging
 ---
@@ -40,8 +40,8 @@ spec:
           name: transport
         resources:
           limits:
-            memory: 1Gi
-            cpu: "0.5"
+            memory: 4Gi
+            cpu: "2"
           requests:
-            memory: 1Gi
-            cpu: "0.5"
+            memory: 2Gi
+            cpu: "1"

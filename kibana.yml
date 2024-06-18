@@ -16,30 +16,10 @@ spec:
         k8s-app: kibana-logging
     spec:
       containers:
-      - name: kibana-logging
+      - name: kibana
         image: docker.elastic.co/kibana/kibana-oss:6.8.4
-        env:
-          - name: ELASTICSEARCH_URL
-            value: http://elasticsearch-logging:9200
         ports:
         - containerPort: 5601
-          name: ui
-          protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kibana-logging
-  namespace: kube-system
-  labels:
-    k8s-app: kibana-logging
-    kubernetes.io/name: "Kibana"
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 5601
-    protocol: TCP
-    targetPort: ui
-    nodePort: 32010
-  selector:
-    k8s-app: kibana-logging
+        env:
+        - name: ELASTICSEARCH_HOSTS
+          value: "http://elasticsearch-logging:9200"
