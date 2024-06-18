@@ -12,73 +12,92 @@ Este repositorio contiene los archivos de configuración necesarios para despleg
 - **rbac.yml**: Define los roles y permisos necesarios (RBAC) para que los componentes de ELK accedan a recursos en Kubernetes.
 - **web-deployment.yml**: Ejemplo de despliegue de una aplicación web para visualización de logs en Kibana.
 
-### Configuración y Despliegue
+Claro, aquí te dejo una revisión corregida enfocada únicamente en la sección de despliegue del stack ELK en Kubernetes, eliminando la parte del clonado del repositorio y mostrando los comandos necesarios para desplegar cada archivo individualmente y luego todos juntos:
 
-#### Prerequisitos
+---
 
-Asegúrate de tener un clúster de Kubernetes configurado. Si no lo tienes, sigue los pasos necesarios para configurar tu clúster Kubernetes antes de proceder con los siguientes comandos.
 
-#### Pasos para desplegar el stack ELK
+### Pasos para el Despliegue
 
-1. **Aplicar los permisos RBAC**:
+1. **RBAC (Role-Based Access Control)**
+   
    ```bash
    kubectl apply -f rbac.yml
    ```
 
-2. **Desplegar Elasticsearch**:
+   - **Descripción**: Crea un service account con acceso a lectura a servicios, endpoints y namespaces.
+
+2. **Elasticsearch**
+
    ```bash
    kubectl apply -f elastic.yml
    ```
 
-3. **Crear el servicio para Elasticsearch**:
+   - **Descripción**: Define la configuración y el StatefulSet para Elasticsearch.
+
+3. **Servicio para Elasticsearch**
+
    ```bash
    kubectl apply -f elastic-service.yml
    ```
 
-4. **Verificar Elasticsearch**:
-   Puedes verificar que Elasticsearch esté corriendo correctamente mediante:
-   ```bash
-   kubectl port-forward -n kube-system svc/elasticsearch-logging 9200:9200
-   ```
-   Opcionalmente, accede a http://localhost:9200 desde tu navegador.
+   - **Descripción**: Crea un servicio para exponer Elasticsearch dentro del clúster.
 
-5. **Desplegar Logstash**:
+4. **Logstash**
+
    ```bash
    kubectl apply -f logstash-config.yml
    kubectl apply -f logstash-deployment.yml
    ```
 
-6. **Desplegar Filebeat**:
+   - **Descripción**: Configura Logstash para recibir, procesar y enviar logs a Elasticsearch.
+
+5. **Filebeat**
+
    ```bash
    kubectl apply -f filebeat-daemon-set.yml
    ```
 
-7. **Desplegar Kibana**:
+   - **Descripción**: Despliega un DaemonSet de Filebeat para enviar logs a Logstash.
+
+6. **Kibana**
+
    ```bash
    kubectl apply -f kibana.yml
    ```
 
-8. **Acceder a Kibana**:
-   Si has configurado el servicio como LoadBalancer, obtén la IP pública del balanceador de carga:
-   ```bash
-   minikube service kibana-logging -n kube-system
-   ```
-   Accede a la URL proporcionada desde tu navegador para visualizar Kibana.
+   - **Descripción**: Despliega Kibana para visualizar y analizar los logs almacenados en Elasticsearch.
 
-9. **Desplegar una aplicación web (opcional)**:
-   Si deseas visualizar logs de una aplicación web específica, despliégala utilizando:
-   ```bash
-   kubectl apply -f web-deployment.yml
-   ```
+### Verificación del Despliegue
 
-### Despliegue Completo
+Una vez desplegados todos los componentes, verifica que los pods estén en estado `Running`:
 
-Para desplegar todos los componentes ELK en una sola operación, ejecuta el siguiente comando:
+```bash
+kubectl get pods --namespace kube-system
+```
+
+### Acceso a Kibana
+
+Para acceder a Kibana desde Minikube, obtén la URL utilizando el comando:
+
+```bash
+minikube service kibana-logging -n kube-system
+```
+
+Esto debería proporcionarte una URL donde puedes acceder a Kibana desde tu navegador web.
+
+### Despliegue Conjunto
+
+Si deseas desplegar todos los recursos juntos después de haber corregido y verificado cada archivo por separado:
 
 ```bash
 kubectl apply -f rbac.yml -f elastic.yml -f elastic-service.yml -f logstash-config.yml -f logstash-deployment.yml -f filebeat-daemon-set.yml -f kibana.yml
 ```
 
-Este comando ejecuta todas las configuraciones de una vez, asegurando que todos los componentes de ELK estén desplegados correctamente en tu clúster Kubernetes.
+Esto aplicará todos los archivos YAML en secuencia para configurar todo el stack ELK en tu clúster Kubernetes.
 
-Con estos pasos, deberías tener un stack ELK completamente funcional en tu entorno de Kubernetes, listo para la agregación y visualización de logs de tus microservicios.
+---
+
+Con estos pasos, deberías poder desplegar y verificar el stack ELK correctamente en tu entorno Kubernetes. Asegúrate de revisar los logs y estados de los recursos para abordar cualquier problema específico que pueda surgir durante el despliegue.
+
+
