@@ -1,103 +1,40 @@
-### Configuración de ELK para Kubernetes/microservicios
+# ELK-Kubernetes
+Setup the ELK stack for Kubernetes/microservices  
 
-Este repositorio contiene los archivos de configuración necesarios para desplegar un stack ELK (Elasticsearch, Logstash, Kibana) en un entorno de Kubernetes. A continuación se explica el propósito de cada archivo de configuración:
-
-- **elastic-service.yml**: Define el servicio para Elasticsearch.
-- **elastic.yml**: Configura el despliegue de Elasticsearch como un StatefulSet.
-- **filebeat-daemon-set.yml**: Despliega Filebeat como un DaemonSet para enviar logs a Logstash.
-- **kibana.yml**: Despliega Kibana para la visualización de logs.
-- **kibana.png**: Imagen ilustrativa de Kibana.
-- **logstash-config.yml**: Configura Logstash para el formato de logs que Elasticsearch puede entender.
-- **logstash-deployment.yml**: Despliega Logstash como un Deployment.
-- **rbac.yml**: Define los roles y permisos necesarios (RBAC) para que los componentes de ELK accedan a recursos en Kubernetes.
-- **web-deployment.yml**: Ejemplo de despliegue de una aplicación web para visualización de logs en Kibana.
-
-Claro, aquí te dejo una revisión corregida enfocada únicamente en la sección de despliegue del stack ELK en Kubernetes, eliminando la parte del clonado del repositorio y mostrando los comandos necesarios para desplegar cada archivo individualmente y luego todos juntos:
-
----
-
-
-### Pasos para el Despliegue
-
-1. **RBAC (Role-Based Access Control)**
-   
-   ```bash
-   kubectl apply -f rbac.yml
-   ```
-
-   - **Descripción**: Crea un service account con acceso a lectura a servicios, endpoints y namespaces.
-
-2. **Elasticsearch**
-
-   ```bash
-   kubectl apply -f elastic.yml
-   ```
-
-   - **Descripción**: Define la configuración y el StatefulSet para Elasticsearch.
-
-3. **Servicio para Elasticsearch**
-
-   ```bash
-   kubectl apply -f elastic-service.yml
-   ```
-
-   - **Descripción**: Crea un servicio para exponer Elasticsearch dentro del clúster.
-
-4. **Logstash**
-
-   ```bash
-   kubectl apply -f logstash-config.yml
-   kubectl apply -f logstash-deployment.yml
-   ```
-
-   - **Descripción**: Configura Logstash para recibir, procesar y enviar logs a Elasticsearch.
-
-5. **Filebeat**
-
-   ```bash
-   kubectl apply -f filebeat-daemon-set.yml
-   ```
-
-   - **Descripción**: Despliega un DaemonSet de Filebeat para enviar logs a Logstash.
-
-6. **Kibana**
-
-   ```bash
-   kubectl apply -f kibana.yml
-   ```
-
-   - **Descripción**: Despliega Kibana para visualizar y analizar los logs almacenados en Elasticsearch.
-
-### Verificación del Despliegue
-
-Una vez desplegados todos los componentes, verifica que los pods estén en estado `Running`:
-
-```bash
-kubectl get pods --namespace kube-system
+First thing first, Please clone the repository to download the code locally
 ```
-
-### Acceso a Kibana
-
-Para acceder a Kibana desde Minikube, obtén la URL utilizando el comando:
-
-```bash
-minikube service kibana-logging -n kube-system
+git clone https://github.com/hussainaphroj/ELK-kubernetes.git  
 ```
+You haven't set up the Kubernetes cluster yet, Please clone my [Kubernetes setup repo](https://github.com/hussainaphroj/kubernetes-cluster-setup) .   
 
-Esto debería proporcionarte una URL donde puedes acceder a Kibana desde tu navegador web.
+**Note:** This ELK stack has been tested on **minikube** and Kubernetes cluster on **Baremetal**.
 
-### Despliegue Conjunto
+The ELK stack is a popular tool for log aggregation and visualization and it stands for **Elastic Logstash Kibana**
 
-Si deseas desplegar todos los recursos juntos después de haber corregido y verificado cada archivo por separado:
+The steps used to set up the ELK stack are:  
+- We start by creating the Elastic component first but before creating/installing the Elastic, we will create the service account which has read access to service, endpoint and  namespaces using `` kubectl apply -f rbac.yml ``  
+- We will setpup the Elastic cluster now, we will create the statefulset using `` kubectl apply -f elastic.yml``  
 
-```bash
-kubectl apply -f rbac.yml -f elastic.yml -f elastic-service.yml -f logstash-config.yml -f logstash-deployment.yml -f filebeat-daemon-set.yml -f kibana.yml
-```
+- Let create the cluster type elastic service using `` kubectl apply -f elastic-service.yml`` and can be verifed by forwading it ports to local ``kubectl port-forward -n kube-system svc/elasticsearch-logging 9200:9200``. Optinally, you can browse (http://localhost:9200)  
+That's all for the Elastic cluster, now we will deploy the logstash.  
+- Logstash receives the logs and formate them in a way that Elasticsearch understand.  we will deploy the logstash using `` kubectl apply -f logstash-config.yml && kubectl apply -f logstash-deployment.yml ``  
 
-Esto aplicará todos los archivos YAML en secuencia para configurar todo el stack ELK en tu clúster Kubernetes.
+- Once logstash is deployed successfully, we deploy the filebeat agent to ship the logs to Logstash. We will use the **Daemonset** kind of deployment which ensure that a pod will running on each node. It can be deployed using `` kubectl apply -f filebeat-daemon-set.yml ``  
+- We have come to our end of the deployment, we will deploy the Kibana now for log visualisation using `` kubectl apply -f kibana.yml``. Please note that I have used the **LoadBalancer** service type but you can use **NodePort** type and use the node IP to access from the browser. Since I have setup all on **Minikube** and get the public ip of LoadBalance using ``minikube service kibana-logging -n kube-system`` .   
+It will give a url and you can access it using your favorite browser. Please create a **logstash*** indexer by selecting **@timestamp** 
 
----
+You can see a lot of data on Kibana after clicking on **Discover** tab.
 
-Con estos pasos, deberías poder desplegar y verificar el stack ELK correctamente en tu entorno Kubernetes. Asegúrate de revisar los logs y estados de los recursos para abordar cualquier problema específico que pueda surgir durante el despliegue.
+That's all for the ELK cluster setup. If you want to test it using the application. Lets deploy the web application and visualize the log in Kibana using ``kubectl apply -f web-deployment.yml``.
+
+You can filter the log based on Kubernetes label name and error type.
+
+# Kibana Snap
+![kibana](kibana.png)
+
+That's all my friends!!! start using your ELK cluster. Give me a star if you like it.
+
+**Happy Learning!!!**
 
 
+ 
