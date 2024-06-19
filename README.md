@@ -128,3 +128,9 @@ Pagina oficial de [Elastic](https://www.elastic.co/guide/en/kibana/7.17/index-pa
 7. **Explorar el patrón de índice**: Una vez creado el patrón de índice, Kibana te llevará automáticamente al área de descubrimiento de datos donde puedes comenzar a explorar y visualizar tus datos utilizando diferentes herramientas y paneles dentro de Kibana.
 
 Al seguir estos pasos, habrás configurado con éxito un patrón de índice en Kibana para comenzar a trabajar con tus datos desde Elasticsearch.
+
+## Amazon ECR Public Gallery
+
+Amazon Elastic Container Registry [ECR](https://gallery.ecr.aws/)
+Amazon ECR Public Gallery es una solución poderosa para la gestión y distribución pública de imágenes de contenedores, facilitando la colaboración y el uso compartido de aplicaciones contenedorizadas en la comunidad global. Con sus características de escalabilidad, integración con AWS y facilidad de uso, es una herramienta esencial para desarrolladores y organizaciones que trabajan con contenedores Docker.
+
