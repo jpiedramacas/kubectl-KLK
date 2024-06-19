@@ -104,7 +104,27 @@ kubectl port-forward service/kibana-logging 5601:5601 --namespace kube-system
 
 Luego, accede a Kibana en `http://localhost:5601`.
 
+Con estos pasos, deberías poder desplegar y verificar el stack ELK correctamente en tu entorno Kubernetes. Asegúrate de revisar los logs y estados de los recursos para abordar cualquier problema específico que pueda surgir durante el despliegue.
 
 ---
 
-Con estos pasos, deberías poder desplegar y verificar el stack ELK correctamente en tu entorno Kubernetes. Asegúrate de revisar los logs y estados de los recursos para abordar cualquier problema específico que pueda surgir durante el despliegue.
+## Index Pattern
+Pagina oficial de [Elastic](https://www.elastic.co/guide/en/kibana/7.17/index-patterns.html)
+
+1. **Iniciar sesión en Kibana**: Accede a tu instancia de Kibana a través de la URL correspondiente en tu navegador.
+
+2. **Ir a la pestaña Management (Gestión)**: En la barra lateral izquierda de Kibana, haz clic en "Management" (Gestión).
+
+3. **Seleccionar "Index Patterns" (Patrones de índice)**: Dentro de la sección de Gestión, selecciona "Index Patterns" (Patrones de índice). Aquí verás una lista de los patrones de índice existentes si los hay.
+
+4. **Crear un nuevo patrón de índice**: Para crear uno nuevo, haz clic en el botón "Create index pattern" (Crear patrón de índice).
+
+5. **Configurar el patrón de índice**:
+   - **Nombre del patrón de índice**: Ingresa el nombre del patrón de índice. Puedes usar comodines (*) para coincidir con múltiples índices si es necesario.
+   - **Configuración de tiempo (opcional)**: Si tus datos tienen una marca de tiempo, puedes configurar el campo de tiempo aquí para optimizar las consultas temporales.
+   
+6. **Guardar el patrón de índice**: Haz clic en "Next step" (Siguiente paso) para confirmar la configuración del patrón de índice.
+
+7. **Explorar el patrón de índice**: Una vez creado el patrón de índice, Kibana te llevará automáticamente al área de descubrimiento de datos donde puedes comenzar a explorar y visualizar tus datos utilizando diferentes herramientas y paneles dentro de Kibana.
+
+Al seguir estos pasos, habrás configurado con éxito un patrón de índice en Kibana para comenzar a trabajar con tus datos desde Elasticsearch.
