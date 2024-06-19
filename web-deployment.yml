@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: apache
-        image: httpd
+        image: public.ecr.aws/docker/library/alpine:latest
         ports:
         - containerPort: 80 
         volumeMounts: 
@@ -25,6 +25,7 @@ spec:
       volumes:
       - name: log
         emptyDir: {}
+
 ---
 apiVersion: v1
 kind: Service 
