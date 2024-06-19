@@ -131,6 +131,7 @@ Al seguir estos pasos, habrás configurado con éxito un patrón de índice en K
 
 ## Amazon ECR Public Gallery
 
-Amazon Elastic Container Registry [ECR](https://gallery.ecr.aws/)
-Amazon ECR Public Gallery es una solución poderosa para la gestión y distribución pública de imágenes de contenedores, facilitando la colaboración y el uso compartido de aplicaciones contenedorizadas en la comunidad global. Con sus características de escalabilidad, integración con AWS y facilidad de uso, es una herramienta esencial para desarrolladores y organizaciones que trabajan con contenedores Docker.
+1. Amazon Elastic Container Registry [ECR](https://gallery.ecr.aws/)
+2. Amazon ECR Public Gallery es una solución poderosa para la gestión y distribución pública de imágenes de contenedores, facilitando la colaboración y el uso compartido de aplicaciones contenedorizadas en la comunidad global. Con sus características de escalabilidad, integración con AWS y facilidad de uso, es una herramienta esencial para desarrolladores y organizaciones que trabajan con contenedores Docker.
+
 
